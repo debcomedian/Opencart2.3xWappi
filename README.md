@@ -1,4 +1,4 @@
 # Opencart2.3xWappi
-Wappi module for sending messages to WhatsApp and Telegram when placing or processing an order in Opencart 2.3
-# Installation
-You can download the module on the [official website](https://wappi.pro) after release
+Модуль Wappi для отправки сообщений в WhatsApp и Telegram при размещении или обработке заказа в Opencart 2.3
+## Установка
+Скачать модуль: https://wappi.pro/integrations/opencart
