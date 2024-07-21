@@ -2,7 +2,6 @@
 
 class ControllerExtensionModuleWappiPro extends Controller
 {
-
     public function status_change($route, $data)
     {
         $orderStatusId = $data[1];
@@ -10,17 +9,15 @@ class ControllerExtensionModuleWappiPro extends Controller
 
         $this->load->model('setting/setting');
         $this->load->model('checkout/order');
-        $this->load->model('extension/wappipro/order');
-        $this->load->model('localisation/order_status'); 
 
         $order = $this->model_checkout_order->getOrder($orderId);
-        $statusName = $this->model_localisation_order_status->getOrderStatus($orderStatusId)['name'];
+        $statusName = $this->getOrderStatus($orderStatusId)['name'];
         $settings = $this->model_setting_setting->getSetting('wappipro');
-        $isSelfSendingActive = $settings["wappipro_admin_". $orderStatusId . "_active"];
+        $isSelfSendingActive = isset($settings["wappipro_admin_" . $orderStatusId . "_active"]) ? $settings["wappipro_admin_" . $orderStatusId . "_active"] : '';
 
         if ($this->isModuleEnabled() && !empty($statusName)) {
-            $statusActivate = $settings["wappipro_" . $orderStatusId . "_active"];
-            $statusMessage = $settings["wappipro_" . $orderStatusId . "_message"];
+            $statusActivate = isset($settings["wappipro_" . $orderStatusId . "_active"]) ? $settings["wappipro_" . $orderStatusId . "_active"] : '';
+            $statusMessage = isset($settings["wappipro_" . $orderStatusId . "_message"]) ? $settings["wappipro_" . $orderStatusId . "_message"] : '';
 
             if (!empty($statusActivate) && !empty($statusMessage)) {
                 $replace = [
@@ -31,7 +28,7 @@ class ControllerExtensionModuleWappiPro extends Controller
                     '{billing_last_name}' => $order['payment_lastname'],
                     '{lastname}' => $order['lastname'],
                     '{firstname}' => $order['firstname'],
-                    '{shipping_method}' => $order['shipping_method'],
+                    '{shipping_method}' => isset($order['shipping_method']) ? $order['shipping_method'] : '',
                 ];
 
                 foreach ($replace as $key => $value) {
@@ -42,7 +39,7 @@ class ControllerExtensionModuleWappiPro extends Controller
                 $username = $settings['wappipro_username'];
 
                 if (!empty($apiKey)) {
-                    $platform = ($this->model_setting_setting->getSetting('wappipro_platform'))['wappipro_platform'];
+                    $platform = isset($this->model_setting_setting->getSetting('wappipro_platform')['wappipro_platform']) ? $this->model_setting_setting->getSetting('wappipro_platform')['wappipro_platform'] : '';
 
                     $req = [
                         'postfields' => json_encode([
@@ -56,8 +53,9 @@ class ControllerExtensionModuleWappiPro extends Controller
                         ],
                         'url' => 'https://wappi.pro/' . $platform . 'api/sync/message/send?profile_id=' . $username,
                     ];
+
                     if ($isSelfSendingActive === 'true') {
-                        $wappipro_self_phone = ($this->model_setting_setting->getSetting('wappipro_test'))["wappipro_test_phone_number"];
+                        $wappipro_self_phone = isset($this->model_setting_setting->getSetting('wappipro_test')["wappipro_test_phone_number"]) ? $this->model_setting_setting->getSetting('wappipro_test')["wappipro_test_phone_number"] : '';
                         if (!empty($wappipro_self_phone)) {
                             $req_self = [
                                 'postfields' => json_encode([
@@ -93,9 +91,14 @@ class ControllerExtensionModuleWappiPro extends Controller
         return $result->num_rows;
     }
 
+    private function getOrderStatus($orderStatusId)
+    {
+        $query = $this->db->query("SELECT name FROM " . DB_PREFIX . "order_status WHERE order_status_id = '" . (int)$orderStatusId . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+        return $query->row;
+    }
+
     private function curlito($wait, $req, $method = '')
     {
-
         $curl = curl_init();
         $option = array(
             CURLOPT_URL => $req['url'],

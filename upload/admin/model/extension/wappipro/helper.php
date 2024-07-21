@@ -1,15 +1,12 @@
 <?php
 
-/**
- * Class ModelExtensionWappiProHelper
- */
 class ModelExtensionWappiProHelper extends Model
 {
-    public function sendTestSMS($to, $body)
+    public function sendTestSMS($settings, $to, $body)
     {
-        $apiKey = $this->model_setting_setting->getSettingValue("wappipro_apiKey");
-        $username = $this->model_setting_setting->getSettingValue("wappipro_username");
-        $platform = $this->model_setting_setting->getSettingValue("wappipro_platform");
+        $apiKey = isset($settings['wappipro_apiKey']) ? $settings['wappipro_apiKey'] : null;
+        $username = isset($settings['wappipro_username']) ? $settings['wappipro_username'] : null;
+        $platform = isset($settings['wappipro_platform']) ? $settings['wappipro_platform'] : null;
 
         if (!empty($apiKey)) {
 
@@ -74,9 +71,9 @@ class ModelExtensionWappiProHelper extends Model
         }
     }
 
-    public function get_profile_info() {
-        $apikey = $this->model_setting_setting->getSettingValue("wappipro_apiKey");
-        $username = $this->model_setting_setting->getSettingValue("wappipro_username");
+    public function get_profile_info($settings) {
+        $apikey = isset($settings['wappipro_apiKey']) ? $settings['wappipro_apiKey'] : null;
+        $username = isset($settings['wappipro_username']) ? $settings['wappipro_username'] : null;
         
         if (!$apikey || !$username) {
             error_log('Missing API key or username' . PHP_EOL, 3, DIR_LOGS . "wappi-errors.log");
@@ -178,9 +175,9 @@ class ModelExtensionWappiProHelper extends Model
         return $result_string;        
     }
     
-    public function _save_user() {
-        $apikey = $this->model_setting_setting->getSettingValue("wappipro_apiKey");
-        $username = $this->model_setting_setting->getSettingValue("wappipro_username");
+    public function _save_user($settings) {
+        $apikey = isset($settings['wappipro_apiKey']) ? $settings['wappipro_apiKey'] : null;
+        $username = isset($settings['wappipro_username']) ? $settings['wappipro_username'] : null;
         
         $message_json = json_encode(array(
             'url' => $_SERVER['HTTP_REFERER'],
