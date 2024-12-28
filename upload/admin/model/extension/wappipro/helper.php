@@ -6,8 +6,9 @@ class ModelExtensionWappiProHelper extends Model
     {
         $apiKey = isset($settings['wappipro_apiKey']) ? $settings['wappipro_apiKey'] : null;
         $username = isset($settings['wappipro_username']) ? $settings['wappipro_username'] : null;
-        $platform = isset($settings['wappipro_platform']) ? $settings['wappipro_platform'] : null;
-
+        $platform_settings = $this->model_setting_setting->getSetting('wappipro_platform');
+        $platform = isset($platform_settings['wappipro_platform']) ? $platform_settings['wappipro_platform'] : '';
+        
         if (!empty($apiKey)) {
 
             $req = array();
@@ -202,12 +203,12 @@ class ModelExtensionWappiProHelper extends Model
     private function _output_cascade($data) {
 		if (isset($data['cascade']) && isset($data['cascade']['order'])) {
 			$cascade = $data['cascade'];
-			$cascade_name = $cascade['name'] ?? '';
+			$cascade_name = isset($cascade['name']) ? $cascade['name'] : '';
 			$order = $cascade['order'];
 		
 			$platforms = array_map(function ($item) {
-				$platform = $item['platform'] ?? '';
-				$profile_uuid = $item['profile_uuid'] ?? '';
+                $platform = isset($item['platform']) ? $item['platform'] : '';
+                $profile_uuid = isset($item['profile_uuid']) ? $item['profile_uuid'] : '';
 		
 				$platform_display = '';
                 switch ($platform) {

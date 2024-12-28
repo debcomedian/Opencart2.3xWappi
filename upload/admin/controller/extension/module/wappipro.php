@@ -84,6 +84,7 @@ class ControllerExtensionModuleWappiPro extends Controller
         $data['step_3']            = $this->language->get('step_3');
         $data['step_4']            = $this->language->get('step_4');
         $data['step_5']            = $this->language->get('step_5');
+        $data['step_6']            = $this->language->get('step_6');
 
         $data['order_status_list'] = $this->model_localisation_order_status->getOrderStatuses();
 

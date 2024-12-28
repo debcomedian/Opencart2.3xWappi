@@ -59,7 +59,9 @@ class ControllerExtensionModuleWappiPro extends Controller
                         ];
 
                         if ($isSelfSendingActive === 'true') {
-                            $wappipro_self_phone = isset($this->model_setting_setting->getSetting('wappipro_test')["wappipro_test_phone_number"]) ? $this->model_setting_setting->getSetting('wappipro_test')["wappipro_test_phone_number"] : '';
+                            $wappipro_settings = $this->model_setting_setting->getSetting('wappipro_test');
+                            $wappipro_self_phone = isset($wappipro_settings['wappipro_test_phone_number']) ? $wappipro_settings['wappipro_test_phone_number'] : '';
+                            
                             if (!empty($wappipro_self_phone)) {
                                 $req_self = [
                                     'postfields' => json_encode([
@@ -91,7 +93,9 @@ class ControllerExtensionModuleWappiPro extends Controller
                             'url' => 'https://wappi.pro/csender/cascade/send',
                         ];
                         if ($isSelfSendingActive === 'true') {
-                            $wappipro_self_phone = ($this->model_setting_setting->getSetting('wappipro_test'))["wappipro_test_phone_number"];
+                            $wappipro_settings = $this->model_setting_setting->getSetting('wappipro_test');
+                            $wappipro_self_phone = isset($wappipro_settings['wappipro_test_phone_number']) ? $wappipro_settings['wappipro_test_phone_number'] : '';
+                            
                             if (!empty($wappipro_self_phone)) {
                                 $req_self = [
                                     'postfields' => json_encode([
