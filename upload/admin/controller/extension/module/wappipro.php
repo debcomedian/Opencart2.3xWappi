@@ -81,8 +81,6 @@ class ControllerExtensionModuleWappiPro extends Controller
 
         $data['btn_token_save_all'] = $this->language->get('btn_token_save_all');
 
-        $data['btn_status_order_description'] = $this->language->get('btn_status_order_description');
-        
         $data['instructions_title']  = $this->language->get('instructions_title');
 
         $data['step_1']            = $this->language->get('step_1');

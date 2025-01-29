@@ -38,13 +38,8 @@ class ControllerExtensionModuleWappiPro extends Controller
                         $placeholder = $key;
                         if (isset($replacements[$placeholder])) {
                             $statusMessage = str_replace('{' . $placeholder . '}', $value, $statusMessage);
-                            error_log('Replaced ' . $placeholder . ' with ' . $value . PHP_EOL, 3, DIR_LOGS . "wappi-errors.log");
-                        } else {
-                            error_log('Warning: Key ' . $key . ' not found in replacements' . PHP_EOL, 3, DIR_LOGS . "wappi-errors.log");
                         }
                     }
-                } else {
-                    error_log('Warning: No replacements available for processing' . PHP_EOL, 3, DIR_LOGS . "wappi-errors.log");
                 }
 
                 $apiKey = $settings['wappipro_apiKey'];
